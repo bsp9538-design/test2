@@ -1,0 +1,34 @@
+clc;
+clear;
+
+%% Declare symbolic variables
+syms x p q positive
+
+%% Gamma Function
+Gamma_p = int(x^(p-1)*exp(-x), x, 0, inf);
+disp('General Gamma Function Γ(p):');
+disp(Gamma_p);
+
+%% Beta Function
+Beta_pq = int(x^(p-1)*(1-x)^(q-1), x, 0, 1);
+disp('General Beta Function B(p,q):');
+disp(Beta_pq);
+
+%% Beta–Gamma Relation
+Beta_Gamma = gamma(p)*gamma(q)/gamma(p+q);
+disp('Beta–Gamma Relation Expression:');
+disp(Beta_Gamma);
+
+%% Numerical Verification
+p_val = input('Enter value of p (>0): ');
+q_val = input('Enter value of q (>0): ');
+
+Beta_num = beta(p_val, q_val);
+Gamma_num = gamma(p_val)*gamma(q_val)/gamma(p_val + q_val);
+
+disp('Numerical Evaluation:');
+fprintf('Beta(%g,%g) = %.6f\n', p_val, q_val, Beta_num);
+fprintf('Using Gamma relation = %.6f\n', Gamma_num);
+
+%% Numerical Difference Check
+fprintf('Difference = %.6e\n', abs(Beta_num - Gamma_num));

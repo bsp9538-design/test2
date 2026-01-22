@@ -1,0 +1,30 @@
+clc;
+clear all;
+
+n = input('Enter number of vectors: ');
+for i = 1:n
+    fprintf('Enter vector %d: ', i);
+    V{i} = input('');
+end
+
+A = cell2mat(V');
+U = zeros(size(A));
+Q = zeros(size(A));
+
+for i = 1:n
+    U(i,:) = A(i,:);
+    for j = 1:i-1
+        proj = (dot(A(i,:),U(j,:))/dot(U(j,:),U(j,:))) * U(j,:);
+        U(i,:) = U(i,:) - proj;
+    end
+end
+
+for i = 1:n
+    Q(i,:) = U(i,:) / norm(U(i,:));
+end
+
+disp('Orthogonal Vectors:');
+disp(U);
+
+disp('Orthonormal Vectors:');
+disp(Q);

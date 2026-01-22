@@ -1,0 +1,61 @@
+clc;
+clear all;
+close all;
+
+n = input('Enter number of vectors: ');
+
+for i = 1:n
+    fprintf("Enter vector %d: ", i);
+    v{i} = input('');
+    v{i} = v{i}(:);
+end
+
+A = [];
+for i = 1:n
+    A = [A v{i}];
+end
+
+r = rank(A);
+
+if r == n
+    disp('Vectors are LINEARLY INDEPENDENT');
+else
+    disp('Vectors are LINEARLY DEPENDENT');
+end
+@@@@@@ Inner Product & Cauchy–Schwarz Inequality @@@@@@@@
+for i = 1:n
+    for j = i+1:n
+        lhs = abs(dot(v{i}, v{j}));
+        rhs = norm(v{i}) * norm(v{j});
+
+        if lhs <= rhs
+            disp('Cauchy–Schwarz Inequality Verified');
+        end
+    end
+end
+
+
+@@@@@@ Norms, Orthogonal & Orthonormal Sets @@@@@@
+for i = 1:n
+    fprintf("||v%d|| = %g\n", i, norm(v{i}));
+end
+
+orthogonal = true;
+for i = 1:n
+    for j = i+1:n
+        if dot(v{i}, v{j}) ~= 0
+            orthogonal = false;
+        end
+    end
+end
+
+if orthogonal
+    disp('Set is ORTHOGONAL');
+else
+    disp('Set is NOT ORTHOGONAL');
+end
+
+for i = 1:n
+    e{i} = v{i}/norm(v{i});
+    disp(e{i}');
+end

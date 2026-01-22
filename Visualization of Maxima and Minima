@@ -1,0 +1,85 @@
+clc;
+clear;
+close all;
+
+% Declare symbolic variables
+syms x y
+
+% User input function
+f = input('Enter the function f(x,y): ');
+
+% Display the function
+disp('The entered function is:');
+disp(f);
+
+%% First-order partial derivatives
+fx = diff(f, x);
+fy = diff(f, y);
+
+%% Solve for critical points
+[xc, yc] = solve(fx == 0, fy == 0, x, y);
+
+% Convert to numeric
+xc = double(xc);
+yc = double(yc);
+
+%% Create mesh grid for visualization
+[xg, yg] = meshgrid(-10:0.2:10, -10:0.2:10);
+f_numeric = matlabFunction(f);
+zg = f_numeric(xg, yg);
+
+%% Surface plot
+figure;
+surf(xg, yg, zg);
+shading interp
+hold on;
+
+% Plot critical points
+for i = 1:length(xc)
+    zc = f_numeric(xc(i), yc(i));
+    plot3(xc(i), yc(i), zc, 'r.', 'MarkerSize', 25);
+end
+
+xlabel('x');
+ylabel('y');
+zlabel('f(x,y)');
+title('Surface Plot with Critical Points');
+grid on;
+
+%% Contour plot
+figure;
+contour(xg, yg, zg, 30);
+hold on;
+plot(xc, yc, 'r.', 'MarkerSize', 25);
+
+xlabel('x');
+ylabel('y');
+title('Contour Plot with Critical Points');
+grid on;
+
+%% Second derivatives for classification
+fxx = diff(fx, x);
+fyy = diff(fy, y);
+fxy = diff(fx, y);
+
+%% Display classification
+disp('Critical Points Classification:');
+
+for i = 1:length(xc)
+    D = subs(fxx*fyy - fxy^2, {x, y}, {xc(i), yc(i)});
+    D = double(D);
+    
+    fxx_val = double(subs(fxx, {x, y}, {xc(i), yc(i)}));
+
+    fprintf('\nAt (%.2f, %.2f): ', xc(i), yc(i));
+
+    if D > 0 && fxx_val > 0
+        disp('Local Minimum');
+    elseif D > 0 && fxx_val < 0
+        disp('Local Maximum');
+    elseif D < 0
+        disp('Saddle Point');
+    else
+        disp('Test Inconclusive');
+    end
+end

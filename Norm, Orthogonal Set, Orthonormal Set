@@ -1,0 +1,54 @@
+
+clc;
+clear;
+
+% Enter number of vectors
+n = input('Enter number of vectors: ');
+
+V = cell(1,n);
+for i = 1:n
+    fprintf('Enter vector %d as a row (e.g., [1 2 3]): ', i);
+    V{i} = input('');
+end
+
+% Convert to matrix form (each row is a vector)
+A = cell2mat(V');
+disp('Vectors entered:');
+disp(A);
+
+%% 1. CALCULATE NORM OF EACH VECTOR
+disp('--- Norm of Each Vector ---');
+for i = 1:n
+    fprintf('Norm of vector %d = %f\n', i, norm(A(i,:)));
+end
+
+%% 2. CHECK ORTHOGONALITY
+disp('--- Checking Orthogonality ---');
+isOrthogonal = true;
+
+for i = 1:n
+    for j = i+1:n
+        dp = dot(A(i,:), A(j,:));
+        fprintf('Dot product of v%d and v%d = %f\n', i, j, dp);
+        if dp ~= 0
+            isOrthogonal = false;
+        end
+    end
+end
+
+if isOrthogonal
+    disp('The given set of vectors is ORTHOGONAL.');
+else
+    disp('The given set of vectors is NOT orthogonal.');
+end
+
+%% 3. CONSTRUCT ORTHONORMAL SET
+disp('--- Orthonormal Set ---');
+Orthonormal = zeros(size(A));
+
+for i = 1:n
+    Orthonormal(i,:) = A(i,:) / norm(A(i,:));
+end
+
+disp('The Orthonormal vectors are:');
+disp(Orthonormal);

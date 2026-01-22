@@ -1,0 +1,56 @@
+clc;
+clear;
+close all;
+
+%% PART – A : LAGRANGE MULTIPLIERS (GENERAL PROGRAM)
+
+% Declare variables
+syms x y lambda
+
+% User input
+f = input('Enter the objective function f(x,y): ');
+g = input('Enter the constraint g(x,y)=0: ');
+
+% Lagrange function
+L = f + lambda*g;
+
+% Partial derivatives
+Lx = diff(L, x);
+Ly = diff(L, y);
+Ll = diff(L, lambda);
+
+% Solve equations
+sol = solve(Lx == 0, Ly == 0, Ll == 0, x, y, lambda);
+
+% Extract solutions
+x_val = double(sol.x);
+y_val = double(sol.y);
+f_val = double(subs(f, {x,y}, {x_val, y_val}));
+
+% Display results
+disp('--- Lagrange Multipliers Method ---');
+fprintf('Optimal Point(s):\n');
+disp([x_val y_val]);
+fprintf('Function Value(s):\n');
+disp(f_val);
+
+%% PART – B : JACOBIAN (GENERAL PROGRAM)
+
+% Declare new variables
+syms u v
+
+% User input transformation
+X = input('Enter x in terms of u and v: ');
+Y = input('Enter y in terms of u and v: ');
+
+% Jacobian matrix
+J = jacobian([X Y],[u v]);
+
+% Jacobian determinant
+J_det = det(J);
+
+% Display Jacobian
+disp('--- Jacobian Matrix ---');
+disp(J);
+disp('Jacobian Determinant:');
+disp(J_det);
